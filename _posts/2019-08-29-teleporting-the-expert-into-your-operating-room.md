@@ -3,6 +3,7 @@ layout: post
 title: Teleporting test 2
 description: This blog describes a project.
 tags: augmented-reality hololens2 azure-kinect unity3d computer-vision
+published: true
 ---
 
 This is a video:
