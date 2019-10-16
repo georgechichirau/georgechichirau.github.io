@@ -6,14 +6,14 @@ highlighter:      rouge
 permalink:        pretty
 
 # Setup
-title:            Long Qian
-tagline:          'Long Qian'
-description:      'Reality augmented.<br>My personal blog of tech and life.'
-url:              http://longqian.me/
+title:            George Chichirau
+tagline:          'George Chichirau'
+description:      'Transit | Sustainability | Trading <br>My personal blog of tech and life.'
+url:              http://georgechichirau.github.io/
 
 author:
-  name:           'Long Qian'
-  url:            http://longqian.me/
+  name:           'George Chichirau'
+  url:            http://georgechichirau.github.io
 
 paginate:         2
 google_analytics: 'UA-91425204-3'
@@ -30,5 +30,3 @@ tags:
 github_username:  qian256
 facebook_username: joe.qian
 linkedin_username: long-qian
-
-
