@@ -6,8 +6,8 @@ highlighter:      rouge
 permalink:        pretty
 
 # Setup
-title:            
-tagline:          'George Chichirau'
+title:
+tagline:          ''
 description:      'George Chichirau <br>Transit | Urbanism | Trading'
 url:              http://georgechichirau.github.io/
 
