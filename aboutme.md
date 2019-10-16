@@ -3,12 +3,6 @@ layout: page
 title: About Me
 ---
 
-
-<p class="full-width no-margin"><img src="/public/image/profile.jpg" alt="LQ" style="width:15rem;height:15rem;" align="right"/></p>
-
-<blockquote class="full-width"><p>Augmented Reality Programmer, Researcher and Enthusiast</p></blockquote>
-
-
 I am George Chichirau.
 
 ### Education
@@ -17,8 +11,8 @@ I am George Chichirau.
 
 ### Professional Experience
 
-#### Teaching Assistant
+### Teaching Assistant
 
-#### Research Assistant
+### Research Assistant
 
 ### Other Activities
