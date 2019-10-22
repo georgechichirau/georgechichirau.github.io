@@ -1,6 +1,6 @@
 ---
 layout: tagpage
-title: "Tag: General Archives"
-tag: General Archives
+title: "Tag: general-archives"
+tag: general-archives
 robots: noindex
 ---
