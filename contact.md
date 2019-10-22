@@ -6,5 +6,6 @@ published: true
 
 E-mail:
 
-![email1.jpg]({{site.baseurl}}/email1.jpg)
-
+<p class="full-width">
+<img src="/public/image/email1.jpg" width="80%" align="right"/>
+</p>
