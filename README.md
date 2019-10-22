@@ -1,10 +1,8 @@
-# My Blog
-
-Recording pieces of code and life. [http://longqian.me](http://longqian.me)
+# Personal Blog
 
 ### Theme
 
-The theme is forked from [hyde](https://github.com/poole/hyde).
+The theme is forked from [hyde](https://github.com/poole/hyde) as modified by Long Qian. [http://longqian.me](http://longqian.me)
 
 ### License
 
