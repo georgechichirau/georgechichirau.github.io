@@ -1,5 +1,6 @@
 ---
 published: true
+tags: jekyll blog github-page General Archives
 ---
 ## This is the classical first post of any blog
 
