@@ -125,15 +125,6 @@ a.sidebar-nav-item:focus {
 
 /* Introducing new */
 
-  .container {
-    float:center;
-    position: relative;
-
-}
-
-.container { display: inline-block }
-
-
 
 /* Sticky sidebar
  *
