@@ -7,7 +7,7 @@ tags: reading-notes sustainability urban-planning
 I was browsing a major sustainability textbook today:
 
 <p class="full-width">
-<img src="/public/image/2019102501.png" width="50%" align="center"/>
+[<img src="/public/image/2019102501.png" width="50%" align="center"/>](http://www.google.com)
 </p>
 
 When I see this on p. 31:
@@ -22,4 +22,4 @@ I'm not even sure how one would get around understanding the link between densit
 
 Apart from this, what would be the mechanism? And how would one explain away high-fertility, high-density slums? There are definitely quite a few of those throughout Africa and the Middle East.
 
-Strange.     
+Strange.
