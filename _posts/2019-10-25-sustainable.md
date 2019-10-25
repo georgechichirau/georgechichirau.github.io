@@ -6,7 +6,7 @@ tags: reading-notes sustainability urban-planning
 ---
 I was browsing a major sustainability textbook today:
 
-<p>
+<p> class="full-width">
 <a href="https://www.amazon.com/Sustainable-Urban-Planning-Neighbourhoods-Resilience/dp/3955534626"><img src="/public/image/2019102501.png" width="50%" align="center" alt="alt text"></a>
 </p>
 
