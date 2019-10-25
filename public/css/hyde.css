@@ -125,12 +125,12 @@ a.sidebar-nav-item:focus {
 
 /* Introducing new */
 
-.container {
+/*  .container {
     float:center;
     position: relative;
     width: 30%;
 }
-
+*/
 .container { display: inline-block }
 
 .image2{
@@ -138,7 +138,7 @@ a.sidebar-nav-item:focus {
 }
 
 .image2 img {
-    width: 100%;
+    width: 40%;
 /*    height: 4.5in; */
     }
 
