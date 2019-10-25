@@ -133,14 +133,6 @@ a.sidebar-nav-item:focus {
 */
 .container { display: inline-block }
 
-.image2{
-    float:center;
-}
-
-.image2 img {
-    width: 40%;
-/*    height: 4.5in; */
-    }
 
 
 /* Sticky sidebar
