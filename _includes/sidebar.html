@@ -6,9 +6,20 @@
               <a href="{{ site.baseurl }}">
                 {{ site.title }}
                 <p <br> </p>
-                <p class="full-width">
+
+                {% comment %}
+                This is where the profile picture goes.
+                {% endcomment %}
+                <div class = "image2">
+                  <img src = "/public/icon.jpg">
+                  </div>
+
+
+                {% comment %}
+              <!--  <p class="full-width">
                 <img src="/public/icon.jpg" width="40%" display:"block" align="center"/>
-                </p>
+                </p> -->
+                {% endcomment %}
               </a>
             </h1>
             <p class="lead">{{ site.description }}</p>
