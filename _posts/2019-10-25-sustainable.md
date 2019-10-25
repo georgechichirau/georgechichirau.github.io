@@ -1,9 +1,9 @@
 ---
+layout: post
+title: What link between urban density and social ills?
 published: true
 tags: reading-notes sustainability urban-planning
 ---
-## What link between urban density and social ills?
-
 I was browsing a major sustainability textbook today:
 
 <p class="full-width">
