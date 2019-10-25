@@ -7,8 +7,7 @@ tags: reading-notes sustainability urban-planning
 I was browsing a major sustainability textbook today:
 
 <p class="full-width">
-<img src="/public/image/2019102501.png" width="30%" align="center"/>
-<a href="http://www.google.com">
+<a href="http://www.google.com"><img src="/public/image/2019102501.png" width="50%" align="center"/> </a>
 </p>
 
 When I see this on p. 31:
