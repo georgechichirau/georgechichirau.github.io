@@ -24,5 +24,4 @@ Apart from this, what would be the mechanism? And how would one explain away hig
 
 Strange.
 
-<a href="https://meta.stackoverflow.com/users/44330/jason-s">![alt text][1]</a>
-[1]: https://www.gravatar.com/avatar/dd5a7ef1476fb01998a215b1642dfd07?s=128&d=identicon&r=PG
+<p><a href="https://meta.stackoverflow.com/users/44330/jason-s"><img src="https://www.gravatar.com/avatar/dd5a7ef1476fb01998a215b1642dfd07?s=128&amp;d=identicon&amp;r=PG" alt="alt text"></a></p>
