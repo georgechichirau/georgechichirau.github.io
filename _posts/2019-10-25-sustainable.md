@@ -24,4 +24,4 @@ Apart from this, what would be the mechanism? And how would one explain away hig
 
 Strange.
 
-<p><a href="https://meta.stackoverflow.com/users/44330/jason-s"><img src="/public/image/2019102502.png" alt="alt text"></a></p>
+<p><a href="https://www.google.com"><img src="/public/image/2019102502.png" width="80%" align="right" alt="alt text"></a></p>
