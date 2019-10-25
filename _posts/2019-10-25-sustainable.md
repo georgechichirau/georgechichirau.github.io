@@ -7,13 +7,13 @@ tags: reading-notes sustainability urban-planning
 I was browsing a major sustainability textbook today:
 
 <p>
-<a href="https://www.amazon.com/Sustainable-Urban-Planning-Neighbourhoods-Resilience/dp/3955534626"><img src="/public/image/2019102501.png" width="50%" align="right" alt="alt text"></a>
+<a href="https://www.amazon.com/Sustainable-Urban-Planning-Neighbourhoods-Resilience/dp/3955534626"><img src="/public/image/2019102501.png" width="50%" align="center" alt="alt text"></a>
 </p>
 
 When I see this on p. 31:
 
 <p class="full-width">
-<img src="/public/image/2019102502.png" width="80%" align="right"/>
+<img src="/public/image/2019102502.png" width="80%" align="center"/>
 </p>
 
 In support, a single citation from a 1983(!) article, which I couldn't read because it's in German.
