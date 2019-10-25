@@ -23,3 +23,6 @@ I'm not even sure how one would get around understanding the link between densit
 Apart from this, what would be the mechanism? And how would one explain away high-fertility, high-density slums? There are definitely quite a few of those throughout Africa and the Middle East.
 
 Strange.
+
+<a href="https://meta.stackoverflow.com/users/44330/jason-s">![alt text][1]</a>
+[1]: https://www.gravatar.com/avatar/dd5a7ef1476fb01998a215b1642dfd07?s=128&d=identicon&r=PG
