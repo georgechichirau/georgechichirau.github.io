@@ -125,6 +125,17 @@ a.sidebar-nav-item:focus {
 
 /* Introducing new */
 
+#wrap {
+    float: left;
+    position: relative;
+    left: 50%;
+}
+
+#content1 {
+    float: left;
+    position: relative;
+    left: -50%;
+}
 
 /* Sticky sidebar
  *
