@@ -101,8 +101,7 @@ html {
 }
 
 #content1 {
-    float: center;
-    position: center;
+    margin: 0 auto;
 }
 
 /* Sidebar links */
