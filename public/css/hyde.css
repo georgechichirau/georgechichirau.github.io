@@ -104,7 +104,7 @@ html {
   margin-top: 0;
   font-family: 'Average', serif;
   font-weight: bold;
-  font-size: 3.00rem;
+  font-size: 3.25rem;
 }
 
 /* Sidebar nav */
@@ -113,8 +113,7 @@ html {
   list-style: none;
 }
 .sidebar-nav-item {
-/* display: inline-flex; */
-   display: block;
+  display: block;
 }
 a.sidebar-nav-item:hover,
 a.sidebar-nav-item:focus {
@@ -124,25 +123,6 @@ a.sidebar-nav-item:focus {
   font-weight: bold;
 }
 
-/* Introducing new */
-/*
-#wrap {
-    float: margin-left;
-    position: relative;
-    left: 50%;
-}
-
-#content1 {
-    float: margin-left;
-    position: relative;
-    left: -50%;
-}
-
-.center1 {
-  display: table;
-  margin: auto;
-}
-*/
 /* Sticky sidebar
  *
  * Add the `sidebar-sticky` class to the sidebar's container to affix it the
