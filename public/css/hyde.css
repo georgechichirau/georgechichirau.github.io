@@ -96,18 +96,14 @@ html {
 
 #wrap {
     float: center;
-    position: relative;
+    position: center;
     left: 50%;
 }
 
 #content1 {
     float: center;
-    position: relative;
+    position: center;
     left: -50%;
-    /* -» [Strictly for demo purposes].begin «- */
-    line-height:25px;
-    font-size: 20px;
-    /* -» [Strictly for demo purposes].end «- */
 }
 
 /* Sidebar links */
