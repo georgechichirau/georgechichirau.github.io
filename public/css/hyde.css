@@ -92,6 +92,14 @@ html {
     text-align: right;
   }
 }
+/* Insert new */
+
+#foo
+{
+  margin:0 auto;
+  width:30%;
+}
+
 
 /* Sidebar links */
 .sidebar a {
