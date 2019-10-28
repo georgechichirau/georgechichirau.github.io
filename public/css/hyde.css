@@ -89,7 +89,7 @@ html {
     left: 0;
     bottom: 0;
     width: 44rem;
-    text-align: center;
+    text-align: right;
   }
 }
 
@@ -114,7 +114,7 @@ html {
 }
 .sidebar-nav-item {
 /* display: inline-flex; */
-   display: block; 
+   display: block;
 }
 a.sidebar-nav-item:hover,
 a.sidebar-nav-item:focus {
