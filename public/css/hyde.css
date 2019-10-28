@@ -95,17 +95,16 @@ html {
 /* Insert new */
 
 #wrap {
-    float: left;
+    float: center;
     position: relative;
     left: 50%;
 }
 
 #content1 {
-    float: left;
+    float: center;
     position: relative;
     left: -50%;
     /* -» [Strictly for demo purposes].begin «- */
-    background: #def;
     line-height:25px;
     font-size: 20px;
     /* -» [Strictly for demo purposes].end «- */
