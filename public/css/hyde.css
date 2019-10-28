@@ -103,6 +103,7 @@ html {
 #content1 {
     content:url("/public/icon.jpg");
     margin: 0 auto;
+    display: block;
 }
 
 /* Sidebar links */
