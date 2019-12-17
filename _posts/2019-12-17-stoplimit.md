@@ -14,4 +14,8 @@ Well, it is an issue. Look at the example below. I sold a put spread at .35 on 1
 <a href="https://www.georgechichirau.com/public/image/2019121701.png"><img src="/public/image/2019121701.png" width="100%" align="center"/> </a>
 </p>
 
+<p class="full-width">
+<a href="https://www.georgechichirau.com/public/image/2019121701.png"><img src="/public/image/2019121701.png" width="50%" align="center" alt="alt text"></a>
+</p>
+
 This happens more often than you'd think. I don't see what I can do about it, since I can't place any orders on thinkorswim apart from limit, stop and stoplimit. I suppose the only way to fix this would be to move to algorithmic trading and write an exception ("don't execute orders between 9:30 - 9:35 AM").  
