@@ -27,11 +27,11 @@ What this means in terms of urban planning:
 As a side note, I think the dominating effect will be that of ever decreasing purchasing power on the background of ever increasing cities. The first principle of urban economics is essentially that rents paid increase proportionally with city size (source: [Geltner et al.'s Commercial Real Estate Analysis and Investments'](https://www.amazon.ca/Commercial-Estate-Analysis-Investments-CD-ROM/dp/0324305486)):
 
 <p class="full-width">
-<a href="https://www.georgechichirau.com/public/image/2020010601.pdf"><img src="/public/image/2020010601.pdf" width="100%" align="center"/> </a>
+<a href="https://www.georgechichirau.com/public/image/2020010601.png"><img src="/public/image/2020010601.png" width="100%" align="center"/> </a>
 </p>
 
 <p class="full-width">
-<a href="https://www.georgechichirau.com/public/image/2020010602.pdf"><img src="/public/image/2020010602.pdf" width="100%" align="center"/> </a>
+<a href="https://www.georgechichirau.com/public/image/2020010602.png"><img src="/public/image/2020010602.png" width="100%" align="center"/> </a>
 </p>
 
 2) A trend towards global planning. Historically, planning was mostly done at the neighborhood and city level; when ambitious, at the regional level; and when well-paid, at the micro-neighborhood level.
