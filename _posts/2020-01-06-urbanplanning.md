@@ -24,7 +24,7 @@ What this means in terms of urban planning:
 
 1) A trend towards ever smaller habitation units. First of all, because arable land will increase in value; secondly, because as the older generations ("wealth hoarders") live ever longer, new buyers on the market will be able to afford even the tiniest units only well into their 60s and 70s; thirdly, because robotization and continued delocalization will keep wages relatively low; fourthly, because current levels of wealth inequality, absent societal collapse, will likely continue or increase; fifthly, because of a shift in culture determining an increase in communal living as singles (dorm room style or asylum style); sixthly, because of increased density on a background of slowing but still ongoing population increase.
 
-As a side note, I think the dominating effect will be that of ever decreasing purchasing power on the background of ever increasing cities. The first principle of urban economics is essentially that rents paid increase proportionally with city size (source: [Geltner et al.'s Commercial Real Estate Analysis and Investments'](https://www.amazon.ca/Commercial-Estate-Analysis-Investments-CD-ROM/dp/0324305486)):
+As a side note, I think the dominating effect will be that of ever decreasing purchasing power on the background of ever increasing cities. The first principle of urban economics is essentially that rents paid increase proportionally with city size (source: [Geltner et al.'s Commercial Real Estate Analysis and Investments](https://www.amazon.ca/Commercial-Estate-Analysis-Investments-CD-ROM/dp/0324305486)):
 
 <p class="full-width">
 <a href="https://www.georgechichirau.com/public/image/2020010601.png"><img src="/public/image/2020010601.png" width="100%" align="center"/> </a>
