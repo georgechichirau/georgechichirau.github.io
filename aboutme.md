@@ -3,13 +3,13 @@ layout: page
 title: About Me
 ---
 
-My main intellectual forebears are Henry George and Nicholas Georgescu-Roegen; in other words, I am researching how to best integrate environmental sustainability, social justice and economic efficiency. My area of focus is public transit policy and urban housing development.
+My main intellectual forebears are [Henry George](https://en.wikipedia.org/wiki/Henry_George) and [Nicholas Georgescu-Roegen](https://en.wikipedia.org/wiki/Nicholas_Georgescu-Roegen); in other words, I am researching how to best integrate environmental sustainability, social justice and economic efficiency. I focus on public transit policy and urban housing development.
 
-Within this area, I have academic expertise on the following topics:
+Within these areas, I have academic expertise on the following topics:
 
 • Urban rail transit development. I began compiling the IDURC (International Database of Urban Rail Costs) to have data for my own research, and gathered colleagues under the umbrella of the Institute for Urban Rail Studies to ensure its expansion.   
 
-• Applying the Rail + Property model for funding urban transit (institutional investigations using systems thinking).
+• Applying the [Rail + Property model](https://www.mckinsey.com/industries/capital-projects-and-infrastructure/our-insights/the-rail-plus-property-model) for funding urban transit (institutional investigations using systems thinking).
 
 • Performing cost-benefit analyses for urban rail projects.  
 
