@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About Me
+published: true
 ---
 
 My main intellectual forebears are Henry George and Nicholas Georgescu-Roegen; in other words, I am researching how to best integrate environmental sustainability, social justice and economic efficiency. My area of focus is public transit policy and urban housing development.
