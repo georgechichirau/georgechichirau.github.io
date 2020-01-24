@@ -3,7 +3,21 @@ layout: page
 title: About Me
 ---
 
-I am George Chichirau.
+My main intellectual forebears are Henry George and Nicholas Georgescu-Roegen; in other words, I am researching how to best integrate environmental sustainability, social justice and economic efficiency. My area of focus is public transit policy and urban housing development.
+
+Within this area, I have academic expertise on the following topics:
+
+• Urban rail transit development. I began compiling the IDURC (International Database of Urban Rail Costs) to have data for my own research, and gathered colleagues under the umbrella of the Institute for Urban Rail Studies to ensure its expansion.   
+
+• Applying the Rail + Property model for funding urban transit (institutional investigations using systems thinking).
+
+• Performing cost-benefit analyses for urban rail projects.  
+
+My lifelong research agenda also includes:
+
+• Creating a new public policy theoretical framework that is explicitly grounded in behavioral economics, ecological economics, institutional mapping and systems thinking.
+
+• Bringing together urban planning, ecosystem modeling, and machine learning to automate connecting architectural form, ecological role and socioeconomic function.   
 
 ### Education
 
