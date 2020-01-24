@@ -1,6 +1,7 @@
 ---
 layout: page
 title: About Me
+published: true
 ---
 
 My main intellectual forebears are [Henry George](https://en.wikipedia.org/wiki/Henry_George) and [Nicholas Georgescu-Roegen](https://en.wikipedia.org/wiki/Nicholas_Georgescu-Roegen); in other words, I am researching how to best integrate environmental sustainability, social justice and economic efficiency. I focus on public transit policy and urban housing development.
