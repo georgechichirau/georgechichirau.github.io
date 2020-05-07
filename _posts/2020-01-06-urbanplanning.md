@@ -10,7 +10,7 @@ Along the same lines, I'm wondering every now and then what cities will look lik
 
 1) Three generations down the line, the population (anywhere, but definitely in Europe and East Asia) will be significantly older and more health-conscious. The median age in Germany is over 47 today (43 for the EU as a whole) (2018 estimates). This is likely to go up to around 60 or so. They are likely to be the most educated generation ever (perhaps as many people will have PhDs as have Master's today; and a Master's will be the new high school degree).  They will have benefited from a century of medical breakthroughs that may well prove to be as important as the ones from the past century were for us. Communities that will have reduced mortality from cancers and coronary disease by >95% will probably reach a life expectancy of around 120.
 
-(I'm assuming that this a generation decades removed from the current obesity crisis, living in a world where nutrition looks very different.)
+(I'm assuming that this is a generation decades removed from the current obesity crisis, living in a world where nutrition looks very different.)
 
 2) The economy will be largely electrified and nuclearized, benefiting from another century in battery and reactor design improvements. By then, fossil fuels will be of only specialty use. In general, the world will be energy and computing power-rich.
 
