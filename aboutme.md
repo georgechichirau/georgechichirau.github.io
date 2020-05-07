@@ -22,12 +22,10 @@ My lifelong research agenda also includes:
 
 ### Education
 
+-	University of Massachusetts (Boston) – Public Policy, Ph.D. Candidate
+-	University of Massachusetts (Boston) – Public Policy, M.S.
+-	Carleton College — International Relations & Classical Studies, B.A.
+
 ### Publications
 
-### Professional Experience
-
-### Teaching Assistant
-
-### Research Assistant
-
-### Other Activities
+Please see [my Google Scholar page](https://scholar.google.com/citations?user=y1JkmbsAAAAJ&hl=en). 
