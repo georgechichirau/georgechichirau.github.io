@@ -35,5 +35,5 @@ Please see [my Google Scholar page](https://scholar.google.com/citations?user=y1
 Please download a copy from here:
 
 <p class="full-width">
-<a href="https://www.georgechichirau.com/public//document/ResumeGeorgeChichirau.pdf"><img src="/public/image/resume1.png" width="100%" align="center"/> </a>
+<a href="https://www.georgechichirau.com/public/document/ResumeGeorgeChichirau.pdf"><img src="/public/image/resume1.png" width="100%" align="center"/> </a>
 </p>
