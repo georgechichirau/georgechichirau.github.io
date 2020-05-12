@@ -8,7 +8,7 @@ My main intellectual forebears are [Henry George](https://en.wikipedia.org/wiki/
 
 Within these areas, I have academic expertise on the following topics:
 
-• Urban rail transit development. I began compiling the IDURC (International Database of Urban Rail Costs) to have data for my own research (*dataset currently offline*). 
+• Urban rail transit development. I began compiling the IDURC (International Database of Urban Rail Costs) to have data for my own research (*dataset currently offline*).
 
 • Applying the [Rail + Property model](https://www.mckinsey.com/industries/capital-projects-and-infrastructure/our-insights/the-rail-plus-property-model) for funding urban transit (institutional investigations using systems thinking).
 
@@ -29,3 +29,11 @@ My lifelong research agenda also includes:
 ### Publications
 
 Please see [my Google Scholar page](https://scholar.google.com/citations?user=y1JkmbsAAAAJ&hl=en).
+
+### Resume
+
+Please download a copy from here:
+
+<p class="full-width">
+<a href="https://www.georgechichirau.com/public//document/ResumeGeorgeChichirau.pdf"><img src="/public/image/resume1.png" width="100%" align="center"/> </a>
+</p>
