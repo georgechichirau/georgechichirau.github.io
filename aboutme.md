@@ -32,6 +32,8 @@ Please see [my Google Scholar page](https://scholar.google.com/citations?user=y1
 
 ### Resume
 
+See a copy below: 
+
 <p class="full-width">
 <a href="https://www.georgechichirau.com/public/document/ResumeGeorgeChichirau.pdf" ><img src="/public/image/resume1.png" width="100%" align="center"/> </a>
 </p>
