@@ -30,7 +30,7 @@ My lifelong research agenda also includes:
 
 Please see [my Google Scholar page](https://scholar.google.com/citations?user=y1JkmbsAAAAJ&hl=en).
 
-### Resume
+### CV
 
 See a copy below:
 
