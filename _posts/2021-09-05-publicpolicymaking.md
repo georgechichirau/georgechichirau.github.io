@@ -33,20 +33,30 @@ The Federal Reserve purchased securities very aggressively during 2020, adding m
 Other major programs included the following:
 
 •	The Primary Market Corporate Credit Facility, which allowed the Federal Reserve to buy new bonds and provide loans
+
 •	The Secondary Market Corporate Credit Facility, which allowed the Federal Reserve to purchase exchange-traded funds and corporate bonds
+
 •	Repurchase Agreement (or “Repo”) Operations, through which the Federal Reserve increased by an order of magnitude the amount of money available for overnight institutional lending (from $100 billion to $1 trillion in daily repo)
+
 •	The Commercial Paper Funding Facility, through which the Federal Reserve lent at a rate significantly higher than the repo market, with losses covered by the U.S. Treasury
+
 •	The Primary Dealer Credit Facility, through which the Federal Reserve offered no-interest loans to the “primary dealers,” the large financial institutions acting as gatekeepers to the financial markets
+
 •	The Money Market Mutual Fund Liquidity Facility, through which the central bank essentially guaranteed redemptions of short-term loans
-The Main Street Lending Program, through which the central bank lent to companies too large to qualify for the programs of the Small Business Administration
+
+•	The Main Street Lending Program, through which the central bank lent to companies too large to qualify for the programs of the Small Business Administration
+
 •	The Term Asset-Backed Securities Loan Facility, to backstop losses of holders of asset-backed securities (e.g., student loans, auto loans, credit card loans)
+
 •	The Municipal Liquidity Facility, through which the Federal Reserve lent directly to state and local governments, including to public agencies (e.g., the New York Metropolitan Transportation Authority)
 
 By early 2021, it seemed like the Fed’s response to the coronavirus crisis could be quantified as somewhere in the $3 trillion to $6 trillion range, in service to a nation-state with a gross domestic product of just above $20 trillion.
 
 There is much controversy with regard to the socioeconomic effects of quantitative easing, especially in its “infinite” form, and most acutely as it concerns inequality. The last decade has seen a flurry of research work on the subject, with supporters claiming that QE reduces inequality by attenuating economic contractions, and opponents pointing out that its main effect seems to be equity price appreciations. As shares are held very unevenly, stock market booms favor the richest.
 
-Officially, the Federal Reserve has engaged in four rounds of Quantitative Easing during the first two decades of this century: QE1 (2008–2010), QE2 (2010–2012), QE3 (2012–2014), followed by a tapering of activity until the “infinite” QE4 of 2020. The same years (2008–2020) saw a rapid increase in American inequality, as well as a significant drop in life expectancy and various other socio-economic outcomes. The extent to which Federal Reserve policies are related to wider social developments remains much debated. In any case, even if the Federal Reserve Board wished to influence social indicators, it has no legal mandate and no tools through which to achieve wider goals. The central bankers are somewhat akin to the hedge-hog from the famous essay by philosopher Isaiah Berlin (“a fox knows many things, but a hedgehog knows one big thing”), in that liquidity is their only play.
+Officially, the Federal Reserve has engaged in four rounds of Quantitative Easing during the first two decades of this century: QE1 (2008–2010), QE2 (2010–2012), QE3 (2012–2014), followed by a tapering of activity until the “infinite” QE4 of 2020. The same years (2008–2020) saw a rapid increase in American inequality, as well as a significant drop in life expectancy and various other socio-economic outcomes.
+
+The extent to which Federal Reserve policies are related to wider social developments remains much debated. In any case, even if the Federal Reserve Board wished to influence social indicators, it has no legal mandate and no tools through which to achieve wider goals. The central bankers are somewhat akin to the hedge-hog from the famous essay by philosopher Isaiah Berlin (“a fox knows many things, but a hedgehog knows one big thing”), in that liquidity is their only play.
 
 This brings us to fiscal policy. By far, the greater share of responsibility with regard to taxation and spending lies in the hands of Congress: “The Congress shall have Power To lay and collect Taxes, Duties, Imposts and Excises, to pay the Debts and provide for the common Defence and general Welfare of the United States...” (United States Constitution, Article I, Section 8, Clause 1). In other words, the power of the purse is vested in Congress, with the executive and judicial branches playing a much less important role in budgeting.
 
@@ -55,10 +65,15 @@ Under the initial shock, Congress reacted swiftly, passing the Coronavirus Aid, 
 This set of measures attempted to target nearly every section of American society, notably providing:
 
 •	Economic Impact Payments of up to $1,200 per adult and $500 per child
+
 •	Economic Injury Disaster Loans and a Paycheck Protection Program (PPP), through which small businesses could access funds to pay eight weeks of payroll costs and benefits
+
 •	Loans through the Economic Stabilization Fund to larger businesses, states, and municipalities
+
 •	Enhanced unemployment benefits, through the Federal Pandemic Unemployment Compensation (FPUC), providing the unemployed with $600 per week in addition to their state aid allocations
+
 •	Direct payments to health-care providers and medical equipment manufacturers
+
 •	A wide variety of grants, loans, tax credits, deferrals, and deductions, as well as a foreclosure and eviction moratorium to prevent a homelessness crisis (more than a quarter of all rental units were concerned).
 
 The money was spent relatively quickly, with small business loan funds exhausted in mere days, and with federal unemployment payments ceasing at the end of summer 2020. Congress stalled during the months preceding the general election of November 3, 2020, while electoral concerns took center stage and each side campaigned heavily. Unfortunately, the election turned out to be close, provoking chaos in Washington, DC, including public spats between President Trump and various members of Congress. While fighting election results in courts, Trump also brawled publicly with Republican majority leader Mitch McConnell on the topic of the much-delayed relief bill (McConnell was highly averse to the idea of further direct payments; Trump, on the other hand, considered them a necessity).  
