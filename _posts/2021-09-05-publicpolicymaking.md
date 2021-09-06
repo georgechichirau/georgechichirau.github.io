@@ -6,7 +6,7 @@ tags: public-policy textbook
 ---
 Jeff Moyer and I worked throughout this year [to update this textbook - in print next summer, just in time for Fall 2022](https://books.google.com/books/about/Public_Policymaking.html?id=mgqQzgEACAAJ).
 
-Unexpectedly, my main challenge was in writing on monetary policy, and on trying to fairly describe the Fed's actions during the coronavirus crisis. It is, of course, too early to tell what the Fed has wrought upon us, and the debates on what the central bankers' actions mean for inflation, growth and social inequality rage fiercely.
+Unexpectedly, my main challenge was in writing on monetary policy, and in trying to fairly describe the Fed's actions during the coronavirus crisis. It is, of course, too early to tell what the Fed has wrought upon us, and the debates on what the central bankers' actions mean for inflation, growth and social inequality rage fiercely.
 
 I could write very little about policy effects (too early to tell) although my curiosity over what will happen over the next few years is extreme. However, I'm quite happy with my updates on both fiscal and monetary policy. See a sample below (footnotes are deleted here, but will be present in the published text). Buy it when it comes out! :)      
 
