@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Representing Somerville 2nd Ward at the Democratic Convention in Worcester
-published: false
+published: true
 tags: local-politics Democrats event
 ---
 Good week-end in Worcester, with surprisingly high-quality appetizers at all events I attended (so -  a positive change from some previous gatherings).
