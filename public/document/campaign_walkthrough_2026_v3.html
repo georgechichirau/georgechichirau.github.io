@@ -270,7 +270,198 @@ const MAP = [{"id":"AL","fips":"01","name":"Alabama","d":"M648.0,492.4L651.8,491
   window.CampaignArt = Object.freeze({character,scene,bus});
 }());
 
-const API='https://plcy8118-election-classroom-sync.chattymusic4.chatgpt.site/api/campaign';
+/* On the Stump v3: client-only electorate panel + crowd reactions.
+   Display only. Nothing here touches scoring, answer ids, data.mjs, or engine.mjs.
+   Electorate numbers are ILLUSTRATIVE CLASSROOM ESTIMATES, not polling or FEC data. */
+(function(){
+'use strict';
+// [share of the state's voters %, share of Senate-race donations %]. Groups overlap; columns do not sum to 100.
+// Donor-class groups (big donors, pro-Israel PACs) are "<1" of voters by design. Big donors + small donors + PACs <= 100%.
+const E={
+ AK:{small:[5,22],unions:[18,6],bigmoney:[0.5,30],aipac:[0.5,3],prog:[10,12],farm:[1,1],energy:[12,14],suburban:[14,8],latino:[7,2],black:[3,1],rural:[30,4],vets:[17,7],coast:[15,5],native:[15,3],seniors:[18,8]},
+ ME:{small:[6,24],unions:[14,6],bigmoney:[0.5,28],aipac:[0.5,3],prog:[14,16],farm:[3,1],energy:[3,1],suburban:[15,9],latino:[2,0.5],black:[2,0.5],rural:[35,5],vets:[14,5],coast:[12,4],seniors:[28,12]},
+ IA:{small:[5,20],unions:[12,6],bigmoney:[0.5,30],aipac:[0.5,2],prog:[10,12],farm:[9,8],energy:[4,3],suburban:[16,10],latino:[5,1],black:[3,1],rural:[38,6],vets:[12,4],seniors:[24,10]},
+ KS:{small:[5,18],unions:[8,3],bigmoney:[0.5,34],aipac:[0.5,2],prog:[8,10],farm:[8,9],energy:[6,7],suburban:[18,12],latino:[10,2],black:[5,2],rural:[35,5],vets:[13,5],seniors:[22,9]},
+ MI:{small:[6,22],unions:[24,12],bigmoney:[0.5,26],aipac:[0.5,4],prog:[14,16],farm:[3,2],energy:[4,3],suburban:[20,10],latino:[5,1],black:[13,4],rural:[22,3],vets:[11,4],seniors:[22,8]},
+ OH:{small:[5,20],unions:[20,10],bigmoney:[0.5,30],aipac:[0.5,4],prog:[11,13],farm:[4,3],energy:[5,4],suburban:[20,10],latino:[4,1],black:[12,4],rural:[26,4],vets:[12,4],seniors:[23,9]},
+ NC:{small:[6,22],unions:[4,2],bigmoney:[0.5,32],aipac:[0.5,3],prog:[11,13],farm:[4,3],energy:[2,1],suburban:[24,12],latino:[7,1],black:[21,6],rural:[25,4],vets:[16,6],coast:[5,2],seniors:[21,8]},
+ TX:{small:[5,18],unions:[6,3],bigmoney:[0.5,36],aipac:[0.5,3],prog:[10,12],farm:[4,4],energy:[9,14],suburban:[22,10],latino:[30,6],black:[13,4],rural:[18,3],vets:[13,5],seniors:[19,7]}
+};
+const NAMES={small:'Small-dollar donors',unions:'Union households',bigmoney:'Big donors & tech bros',aipac:'Pro-Israel PACs & donors',prog:'Progressive base',farm:'Farmers',energy:'Energy workers',suburban:'Suburban women',latino:'Latino voters',black:'Black voters',rural:'Rural independents',vets:'Veterans & military families',coast:'Fishing & coastal towns',native:'Alaska Native voters',seniors:'Seniors (65+)'};
+// Extra panel groups per stop, with display-only reactions keyed by answer-label prefix ("Keep" = keep quiet). Unlisted = shrug.
+const X=[
+ {energy:{'Denounce':-1,'Fight for real':1,'Pivot':1,'Keep':-1},suburban:{'Fight for real':1,'Stand behind':-1,'Keep':-1},native:{'Fight for real':1,'Pivot':1,'Keep':-1}},
+ {suburban:{'Keep the tariffs':-1,'Fight for real':1,'Keep':-1},seniors:{'Keep the tariffs':-1,'Fight for real':1,'Rebuild':1}},
+ {seniors:{'Back a national ban':-1,'Leave it':1},black:{'Hit your':1,'Restore':1,'Back a national ban':-1}},
+ {black:{'Secure':1,'Go after':1,'Finish':-1},vets:{'Secure':1,'Stop the raids':-1,'Go after':1,'Finish':1}},
+ {native:{'Responsible':1,'Drill everywhere':-1,'Keep':-1},unions:{'Keep it in':-1,'Drill everywhere':1,'All of':1}},
+ {suburban:{'Back Israel':1,'Keep':1},seniors:{'Back Israel':1,'Unconditional':1,'Condition aid':-1}},
+ {suburban:{'Rebuild':1,'Fund appren':1,'Back a national':-1},latino:{'Back every':1,'Rebuild':1,'Fund appren':1,'Back a national':-1}},
+ {prog:{'Take the money':-1,'Make AI':1,'Break up':1,'Swear off':1},seniors:{'Make AI':1}},
+ {seniors:{'Throw a':1,'Expand':1,'Cut red tape':-1,'Medicare':1,'Keep':-1},vets:{'Throw a':1,'Medicare':-1}},
+ {seniors:{'No bailouts':1,'Cut what':1,'Cancel':-1},black:{'No bailouts':-1,'Cut what':1,'Cancel':1,'Targeted':1}},
+ {black:{'Background':1,'No new':-1,'Ban assault':1},seniors:{'Background':1,'Talk mental':1}},
+ {seniors:{'Court':1,'Voter ID':1},latino:{'Tighten':-1,'Pass a national':1},native:{'Court':1,'Tighten':-1}},
+ {seniors:{'Full-throated':-1,'Leave it':1,'Keep':1},latino:{'“Everybody':1}},
+ {seniors:{'Go after':1,'Defund':-1,'Fund police':1,'Back the blue':1},latino:{'Go after':1,'Defund':-1,'Fund police':1}},
+ {energy:{'End ethanol':-1,'Defend':1,'Farm relief':1},suburban:{'Shift farm':1}},
+ {seniors:{'Fix the VA':1,'Audit':1},small:{'Boost':-1,'Audit':1,'Cut war':1}},
+ {prog:{'Crack down':1,'National rent':1},seniors:{'Build, build':-1}},
+ {seniors:{'Let younger':-1,'Protect':1,'Hands off':1,'Raise':-1,'Keep':-1},unions:{'Let younger':-1,'Protect':1,'Hands off':1,'Raise':-1}},
+ {prog:{'Close':1,'Tax the':1,'Cut corporate':-1,'Take the big':-1},suburban:{'Close':1,'Take the big':-1}},
+ {seniors:{'Cut funding':1,'Free speech':1,'Defend':-1},small:{'Cut funding':-1,'Defend':1}}
+];
+function groups(step,race){
+ const card=DATA.cards[step],t=E[race]||{};
+ const keys=[...card.groups,...Object.keys(X[step]||{})].filter((g,i,a)=>a.indexOf(g)===i&&t[g]);
+ return keys.sort((a,b)=>t[b][0]-t[a][0]);
+}
+function reaction(step,choice,g){
+ const o=DATA.cards[step].options[choice];if(!o)return 0;
+ if(g in o.react)return o.react[g];
+ const m=(X[step]||{})[g]||{};for(const k in m)if(o.label.startsWith(k))return m[k];return 0;
+}
+const pct=v=>v<1?'<1%':v+'%';
+const C={ink:'#243D40',paper:'#FFFDF5'};
+// One look per group: skin, hair, shirt, hat, prop, sign text.
+const L={
+ small:{skin:'#B77A57',hair:'#293E3D',shirt:'#D98555',hat:'beanie',hatc:'#E3B957',prop:'phone',tag:'$5'},
+ unions:{skin:'#D99F74',hair:'#3B3432',shirt:'#507D69',hat:'hardhat',hatc:'#E3B957',prop:'sign',tag:'UNION'},
+ bigmoney:{skin:'#E5AE8C',hair:'#C8C9BA',shirt:'#4F4A7A',hat:'tophat',hatc:'#243D40',prop:'moneybag',tag:'$$$'},
+ aipac:{skin:'#E4B293',hair:'#676359',shirt:'#596D86',hat:'none',prop:'briefcase',tag:'PAC'},
+ prog:{skin:'#C98D67',hair:'#7A4E8A',shirt:'#8A79A9',hat:'none',hair2:'bun',prop:'sign',tag:'NOW!'},
+ farm:{skin:'#BA8056',hair:'#413C33',shirt:'#5D7FA6',hat:'straw',hatc:'#E1C27A',prop:'corn',tag:''},
+ energy:{skin:'#805743',hair:'#343236',shirt:'#C97B3A',hat:'hardhat',hatc:'#D55F3E',prop:'wrench',tag:''},
+ suburban:{skin:'#F1C6A3',hair:'#A66042',shirt:'#6F9C94',hat:'none',hair2:'ponytail',prop:'coffee',tag:''},
+ latino:{skin:'#A86F4C',hair:'#2B2726',shirt:'#C7604B',hat:'cap',hatc:'#346F5C',prop:'sign',tag:'VOTA'},
+ black:{skin:'#6E4532',hair:'#1F1B1A',shirt:'#3F7C8C',hat:'none',hair2:'puff',prop:'sign',tag:'MY VOTE'},
+ rural:{skin:'#E3A985',hair:'#6B4A33',shirt:'#B5524A',hat:'cap',hatc:'#5E6B3E',prop:'none',plaid:true,tag:''},
+ vets:{skin:'#D6A07A',hair:'#9A9D94',shirt:'#657E79',hat:'garrison',hatc:'#4E6B5F',prop:'flag',tag:''},
+ coast:{skin:'#E0A27E',hair:'#5A4636',shirt:'#E8C34A',hat:'souwester',hatc:'#E8C34A',prop:'fish',tag:''},
+ native:{skin:'#B07B57',hair:'#221E1D',shirt:'#3E6E8E',hat:'parka',hatc:'#F2E9D8',prop:'sign',tag:'AK'},
+ seniors:{skin:'#EDB58C',hair:'#E4E2DA',shirt:'#9C6B8E',hat:'none',hair2:'gray',prop:'cane',tag:'',glasses:true}
+};
+function hat(l){const c=l.hatc||'#999';switch(l.hat){
+ case 'hardhat':return `<path d="M33 46q27-34 54 0z" fill="${c}" stroke="${C.ink}" stroke-width="2"/><rect x="29" y="44" width="62" height="6" rx="3" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`;
+ case 'tophat':return `<rect x="40" y="10" width="40" height="28" fill="${c}"/><rect x="40" y="30" width="40" height="5" fill="#B5524A"/><rect x="31" y="36" width="58" height="6" rx="3" fill="${c}"/>`;
+ case 'beanie':return `<path d="M36 44q24-34 48 0z" fill="${c}" stroke="${C.ink}" stroke-width="2"/><circle cx="60" cy="14" r="5" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`;
+ case 'straw':return `<ellipse cx="60" cy="40" rx="36" ry="7" fill="${c}" stroke="${C.ink}" stroke-width="2"/><path d="M42 40q2-20 18-20t18 20z" fill="${c}" stroke="${C.ink}" stroke-width="2"/><path d="M43 36h34" stroke="#B5524A" stroke-width="3"/>`;
+ case 'cap':return `<path d="M37 42q2-22 23-22t23 22z" fill="${c}" stroke="${C.ink}" stroke-width="2"/><path d="M80 40q14 0 18 5H70z" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`;
+ case 'garrison':return `<path d="M38 36l44-6 2 8-46 6z" fill="${c}" stroke="${C.ink}" stroke-width="2"/>`;
+ case 'souwester':return `<path d="M36 42q24-32 48 0z" fill="${c}" stroke="${C.ink}" stroke-width="2"/><path d="M28 44q32 12 64 0" fill="none" stroke="${C.ink}" stroke-width="3"/><path d="M28 44q32 10 64 0" fill="none" stroke="${c}" stroke-width="2"/>`;
+ case 'parka':return `<path d="M30 56q0-38 30-38t30 38" fill="none" stroke="${c}" stroke-width="10" stroke-linecap="round"/>`;
+ default:return '';}}
+function hairdo(l){const h=l.hair;switch(l.hair2){
+ case 'bun':return `<circle cx="60" cy="24" r="8" fill="${h}"/>`;
+ case 'ponytail':return `<path d="M82 46q16 6 10 26q-6-12-14-16z" fill="${h}"/>`;
+ case 'puff':return `<circle cx="60" cy="32" r="22" fill="${h}"/>`;
+ case 'gray':return `<path d="M37 48q-4-14 8-8M83 48q4-14-8-8" stroke="${h}" stroke-width="6" fill="none" stroke-linecap="round"/>`;
+ default:return '';}}
+function prop(l,x,y){switch(l.prop){
+ case 'sign':return `<g transform="translate(${x-22} ${y-40})"><path d="M22 30v40" stroke="#8A6A45" stroke-width="4"/><rect width="44" height="30" rx="3" fill="${C.paper}" stroke="${C.ink}" stroke-width="2"/><text x="22" y="20" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="800" font-size="${l.tag.length>5?8:11}" fill="${C.ink}">${l.tag}</text></g>`;
+ case 'phone':return `<g transform="translate(${x-7} ${y-12})"><rect width="14" height="22" rx="3" fill="${C.ink}"/><rect x="2" y="3" width="10" height="14" fill="#9AD1B4"/><text x="7" y="13" text-anchor="middle" font-size="7" font-weight="800" fill="${C.ink}">$5</text></g>`;
+ case 'moneybag':return `<g transform="translate(${x-14} ${y-10})"><path d="M8 6h12l-3 6q12 4 11 16H0q-1-12 11-16z" fill="#D9B45A" stroke="${C.ink}" stroke-width="2"/><text x="14" y="25" text-anchor="middle" font-size="10" font-weight="900" fill="${C.ink}">$</text></g>`;
+ case 'briefcase':return `<g transform="translate(${x-14} ${y-6})"><rect y="5" width="28" height="18" rx="3" fill="#7B5A3E" stroke="${C.ink}" stroke-width="2"/><path d="M9 5V1h10v4" fill="none" stroke="${C.ink}" stroke-width="2"/><text x="14" y="18" text-anchor="middle" font-size="7" font-weight="800" fill="${C.paper}">PAC</text></g>`;
+ case 'corn':return `<g transform="translate(${x-6} ${y-18})"><ellipse cx="6" cy="12" rx="6" ry="13" fill="#E9C548" stroke="${C.ink}" stroke-width="1.5"/><path d="M0 18q-6-10 2-20M12 18q6-10-2-20" stroke="#6F9A4F" stroke-width="3" fill="none"/></g>`;
+ case 'wrench':return `<g transform="translate(${x} ${y}) rotate(-35)"><rect x="-3" y="-20" width="6" height="26" fill="#8C9699" stroke="${C.ink}" stroke-width="1.5"/><circle cy="-22" r="7" fill="#8C9699" stroke="${C.ink}" stroke-width="1.5"/><circle cy="-24" r="3" fill="${C.paper}"/></g>`;
+ case 'coffee':return `<g transform="translate(${x-7} ${y-10})"><path d="M0 0h14l-2 18H2z" fill="${C.paper}" stroke="${C.ink}" stroke-width="2"/><rect x="-1" y="-3" width="16" height="4" rx="2" fill="#6F4B37"/></g>`;
+ case 'flag':return `<g transform="translate(${x} ${y-34})"><path d="M0 0v40" stroke="${C.ink}" stroke-width="2"/><rect width="24" height="15" fill="#F4EFE2" stroke="${C.ink}" stroke-width="1.5"/><path d="M0 4h24M0 9h24" stroke="#B5524A" stroke-width="2"/><rect width="9" height="7" fill="#536A83"/></g>`;
+ case 'fish':return `<g transform="translate(${x-14} ${y-4})"><path d="M4 8q12-10 22 0q-10 10-22 0zM4 8l-6-6v12z" fill="#83A69A" stroke="${C.ink}" stroke-width="1.5"/><circle cx="21" cy="7" r="1.5" fill="${C.ink}"/></g>`;
+ case 'cane':return `<path d="M${x} ${y}v40M${x} ${y}q0-8 8-8" stroke="#7B5A3E" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+ default:return '';}}
+function figure(g,mood='idle'){
+ const l=L[g]||L.rural,angry=mood==='boo',happy=mood==='cheer';
+ const skin=angry?'#E2624C':l.skin;
+ const eyes=happy?`<path d="M48 54q4-5 8 0M64 54q4-5 8 0" stroke="${C.ink}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`:angry?`<path d="M46 47l10 4M74 47l-10 4" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/><circle cx="52" cy="55" r="2.6" fill="${C.ink}"/><circle cx="68" cy="55" r="2.6" fill="${C.ink}"/>`:`<circle cx="52" cy="54" r="2.4" fill="${C.ink}"/><circle cx="68" cy="54" r="2.4" fill="${C.ink}"/><path d="M47 48l9 1M73 48l-9 1" stroke="${C.ink}" stroke-width="2" stroke-linecap="round"/>`;
+ const mouth=happy?`<path d="M49 63q11 14 22 0z" fill="#7A2E2A" stroke="${C.ink}" stroke-width="2"/>`:angry?`<path d="M50 70q10-9 20 0" fill="none" stroke="${C.ink}" stroke-width="3" stroke-linecap="round"/>`:`<path d="M52 66h16" stroke="${C.ink}" stroke-width="2.5" stroke-linecap="round"/>`;
+ const glasses=l.glasses?`<circle cx="52" cy="54" r="6" fill="none" stroke="${C.ink}" stroke-width="1.8"/><circle cx="68" cy="54" r="6" fill="none" stroke="${C.ink}" stroke-width="1.8"/><path d="M58 54h4" stroke="${C.ink}" stroke-width="1.8"/>`:'';
+ // Arms: [left end, right end]
+ const arms=happy?[[26,46],[94,46]]:angry?[[36,118],[96,58]]:[[22,84],[98,84]];
+ const elbow=happy?[[34,72],[86,72]]:angry?[[38,104],[92,80]]:[[30,98],[90,98]];
+ const sleeve=l.plaid?`<path d="M44 90h32M44 102h32M52 82v42M68 82v42" stroke="#7E3530" stroke-width="2" opacity=".6"/>`:'';
+ const handR=arms[1],handL=arms[0];
+ const propAt=happy?handR:angry?handL:handR;
+ return `<svg class="cr-fig cr-${mood}" viewBox="0 0 120 165" role="img" aria-label="${NAMES[g]}: ${happy?'cheering':angry?'booing':'shrugging'}">
+  <g class="cr-body">
+   <path d="M50 124v30M70 124v30" stroke="${C.ink}" stroke-width="9" stroke-linecap="round"/>
+   <path d="M40 126q-2-46 20-46t20 46z" fill="${l.shirt}" stroke="${C.ink}" stroke-width="2"/>${sleeve}
+   <g class="cr-arm-l"><path d="M44 90L${elbow[0][0]} ${elbow[0][1]}L${handL[0]} ${handL[1]}" stroke="${l.shirt}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${handL[0]}" cy="${handL[1]}" r="5.5" fill="${l.skin}" stroke="${C.ink}" stroke-width="1.5"/></g>
+   <g class="cr-arm-r"><path d="M76 90L${elbow[1][0]} ${elbow[1][1]}L${handR[0]} ${handR[1]}" stroke="${l.shirt}" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${handR[0]}" cy="${handR[1]}" r="${angry?7:5.5}" fill="${l.skin}" stroke="${C.ink}" stroke-width="1.5"/></g>
+   ${l.prop!=='none'&&!(happy&&l.prop==='cane')?prop(l,propAt[0],propAt[1]):''}
+   <g class="cr-head">${l.hair2==='puff'?hairdo(l):''}<circle cx="60" cy="54" r="24" fill="${skin}" stroke="${C.ink}" stroke-width="2"/>
+    <path d="M37 48q3-22 23-22t23 22q-10-10-23-10t-23 10z" fill="${l.hair}"/>${l.hair2&&l.hair2!=='puff'?hairdo(l):''}
+    ${eyes}${glasses}${mouth}${angry?'<path d="M84 36l6-6M88 42l8-2" stroke="#D55F3E" stroke-width="3" stroke-linecap="round"/>':''}
+    <g class="cr-hat">${hat(l)}</g></g>
+  </g>
+  ${happy?`<g class="cr-confetti">${[[14,20,'#E3B957'],[104,16,'#D55F3E'],[22,6,'#346F5C'],[96,34,'#526D95'],[60,4,'#C7604B'],[8,40,'#8A79A9']].map(([x,y,c],i)=>`<rect x="${x}" y="${y}" width="6" height="9" fill="${c}" style="animation-delay:${i*.09}s"/>`).join('')}</g>`:''}
+  ${angry?`<circle class="cr-tomato" cx="100" cy="130" r="8" fill="#D33F2E" stroke="${C.ink}" stroke-width="1.5"/>`:''}
+ </svg>`;
+}
+const BUBBLE={cheer:['YES!','WOO!','YAY!','LOVE IT!'],boo:['BOO!','BOOO!','NOPE!','BOO!'],idle:['meh.','eh…','sure?','hmm.']};
+const CSS=`<style id="crowd-css">
+.ep{margin-top:12px;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px}
+.ep-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}.ep-head b{font-size:13px}
+.ep-note{font-size:10.5px;color:var(--muted)}
+.ep-row{display:grid;grid-template-columns:minmax(120px,1.3fr) 1fr 1fr 34px;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #edf0ea;font-size:12.5px}
+.ep-row:first-of-type{border-top:0}
+.ep-bar{position:relative;height:16px;background:#eef1e8;border-radius:4px;overflow:hidden}.ep-bar i{position:absolute;left:0;top:0;bottom:0;border-radius:4px}
+.ep-bar.v i{background:#8eb4a2}.ep-bar.d i{background:#e3b957}.ep-bar span{position:relative;z-index:1;font-size:11px;font-weight:700;padding-left:5px;line-height:16px}
+.ep-cols{display:grid;grid-template-columns:minmax(120px,1.3fr) 1fr 1fr 34px;gap:10px;font-size:9.5px;letter-spacing:1px;font-weight:800;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.ep-face{width:30px;height:38px}.ep-face:empty{height:0}.ep-face svg{width:100%;height:100%}
+#crowd{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:#233c4033;padding:16px;cursor:pointer}
+#crowd[hidden]{display:none}
+.crowd-inner{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px #233c4033;padding:14px 16px 10px;max-width:980px;width:100%;animation:cr-in .25s ease-out}
+.crowd-top{display:flex;justify-content:space-between;align-items:center;gap:10px}.crowd-top b{font-family:Georgia,serif;font-size:19px}
+.crowd-row{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 10px;margin-top:6px}
+.crowd-cell{width:118px;text-align:center;position:relative;padding-top:26px}
+.crowd-cell .cr-fig{width:100%;height:auto;overflow:visible}
+.crowd-cell .nm{font-size:11px;font-weight:700;line-height:1.2}.crowd-cell .sh{font-size:10px;color:var(--muted)}
+.bubble{position:absolute;top:0;left:50%;transform:translateX(-50%);background:#fff;border:2px solid var(--ink);border-radius:12px;padding:1px 8px;font:900 13px system-ui,sans-serif;white-space:nowrap;animation:cr-pop .35s ease-out both}
+.bubble.boo{background:#f6e1dc;color:#9c3f33}.bubble.cheer{background:#e1efe4;color:#2b6a4c}.bubble.idle{color:#5d6764;font-weight:700}
+.bubble:after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-5px;border:5px solid transparent;border-top-color:var(--ink)}
+.cr-cheer .cr-body{transform-box:fill-box;transform-origin:50% 100%;animation:cr-jump .42s ease-in-out infinite alternate}
+.cr-cheer .cr-hat{transform-box:fill-box;transform-origin:50% 100%;animation:cr-toss 1.1s ease-out both}
+.cr-confetti rect{transform-box:fill-box;animation:cr-fall 1.3s linear infinite}
+.cr-boo .cr-head{transform-box:fill-box;transform-origin:50% 90%;animation:cr-shake .18s linear infinite alternate}
+.cr-boo .cr-arm-r{transform-box:view-box;transform-origin:76px 90px;animation:cr-fist .25s ease-in-out infinite alternate}
+.cr-tomato{transform-box:fill-box;animation:cr-throw 1.1s ease-in .3s both}
+.cr-idle .cr-body{transform-box:fill-box;transform-origin:50% 100%;animation:cr-shrug 1s ease-in-out 2}
+.ep-face .cr-fig *{animation:none!important}.ep-face .cr-confetti,.ep-face .cr-tomato{display:none}
+@keyframes cr-in{from{transform:translateY(30px);opacity:0}}
+@keyframes cr-pop{from{transform:translateX(-50%) scale(.3);opacity:0}}
+@keyframes cr-jump{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+@keyframes cr-toss{0%{transform:translateY(0) rotate(0)}45%{transform:translateY(-34px) rotate(-25deg)}100%{transform:translateY(0) rotate(0)}}
+@keyframes cr-fall{from{transform:translateY(-10px) rotate(0)}to{transform:translateY(90px) rotate(260deg);opacity:0}}
+@keyframes cr-shake{from{transform:rotate(-5deg)}to{transform:rotate(5deg)}}
+@keyframes cr-fist{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+@keyframes cr-throw{0%{transform:translate(0,0);opacity:1}60%{transform:translate(-40px,-110px)}100%{transform:translate(-80px,-60px) scale(1.4);opacity:0}}
+@keyframes cr-shrug{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@media(max-width:740px){.ep-row,.ep-cols{grid-template-columns:minmax(92px,1.1fr) 1fr 1fr 26px;gap:6px;font-size:11px}.ep-face{width:24px;height:30px}.crowd-cell{width:30%;max-width:104px}.crowd-top b{font-size:15px}#crowd{padding:8px}.crowd-inner{padding:10px}}
+@media(prefers-reduced-motion:reduce){#crowd *{animation:none!important}}
+</style>`;
+function moodOf(v){return v>0?'cheer':v<0?'boo':'idle';}
+function panel(step,race,rec){
+ const t=E[race];if(!t)return '';const gs=groups(step,race);
+ const done=rec&&Number.isInteger(rec.choice);
+ return `<div class="ep" aria-label="${esc(DATA.states.find(s=>s.id===race)?.name||race)} electorate"><div class="ep-head"><b>Who’s in the room in ${esc(DATA.states.find(s=>s.id===race)?.name||race)}</b><span class="ep-note">Illustrative estimates for class, not polling data. Groups overlap, so columns don’t add to 100%.</span></div>
+ <div class="ep-cols"><span>Group</span><span>Share of voters</span><span>Share of donations</span><span>${done?'Mood':''}</span></div>
+ ${gs.map(g=>{const [v,d]=t[g],m=done?moodOf(reaction(step,rec.choice,g)):'';return `<div class="ep-row"><span>${esc(NAMES[g])}</span><span class="ep-bar v"><i style="width:${Math.max(2,Math.min(100,v*2.5))}%"></i><span>${pct(v)}</span></span><span class="ep-bar d"><i style="width:${Math.max(2,Math.min(100,d*2.5))}%"></i><span>${pct(d)}</span></span><span class="ep-face">${done?figure(g,m):''}</span></div>`;}).join('')}</div>`;
+}
+let timer=null;
+function ensure(){if(!document.getElementById('crowd-css'))document.head.insertAdjacentHTML('beforeend',CSS);let el=document.getElementById('crowd');if(!el){el=document.createElement('div');el.id='crowd';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-label','Crowd reaction');document.body.appendChild(el);el.addEventListener('click',hide);document.addEventListener('keydown',e=>{if(e.key==='Escape')hide();});}return el;}
+function hide(){const el=document.getElementById('crowd');if(el)el.hidden=true;clearTimeout(timer);}
+function motionAllowed(){return !document.body.classList.contains('motion-off')&&!matchMedia('(prefers-reduced-motion: reduce)').matches;}
+function play(step,race,choice,ms=2600){
+ const el=ensure();if(!motionAllowed())return false;
+ const t=E[race]||{},gs=groups(step,race),st=DATA.states.find(s=>s.id===race);
+ el.innerHTML=`<div class="crowd-inner"><div class="crowd-top"><b>${esc(st?.name||race)} reacts: ${'ABCDE'[choice]}</b><button class="crowd-skip" type="button">Skip ›</button></div><div class="crowd-row">${gs.map((g,i)=>{const m=moodOf(reaction(step,choice,g));const words=BUBBLE[m];return `<div class="crowd-cell"><span class="bubble ${m}" style="animation-delay:${i*.08}s">${words[i%words.length]}</span>${figure(g,m)}<div class="nm">${esc(NAMES[g])}</div><div class="sh">${pct(t[g][0])} of voters</div></div>`;}).join('')}</div></div>`;
+ el.hidden=false;clearTimeout(timer);timer=setTimeout(hide,ms);return true;
+}
+ensure();
+window.Crowd=Object.freeze({E,NAMES,X,groups,reaction,panel,play,hide,figure});
+}());
+
+const API='https://plcy8118-classroom.george-chichirau.workers.dev/api/campaign';
 const $=id=>document.getElementById(id),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>crypto.randomUUID().replaceAll('-','');
 const readStore=(k,f)=>{try{return JSON.parse(localStorage.getItem(k))??f;}catch{return f;}};
@@ -314,7 +505,7 @@ async function send(action){
    let result;for(let attempt=0;attempt<3;attempt++){try{result=await request({op:'action',room,playerSecret:identity.secret,action:a});break;}catch(e){if(e.message&&!(e instanceof TypeError)&&e.name!=='TimeoutError')throw e;if(attempt===2)throw e;await new Promise(r=>setTimeout(r,300*(attempt+1)));}}
    accept(result.state);
   }
-  if(action.type==='choice')toast(solo?'On the record.':'On the record. The class can see it.');
+  if(action.type==='choice'){toast(solo?'On the record.':'On the record. The class can see it.');const r=me()?.rounds?.[action.round]?.[action.step];if(r&&Number.isInteger(r.choice))Crowd.play(action.step,me().race,r.choice);}
  }catch(e){if(e instanceof TypeError||e.name==='TimeoutError'){connected=false;toast('Connection lost. Your action is not confirmed. Retry after reconnecting.',true);}else toast(e.message,true);}
  finally{pending=false;render();}
 }
@@ -343,7 +534,7 @@ function roster(){const ps=Object.values(state.players);return ps.length?`<div c
 function table(round=state.round){return `<table class="standings"><thead><tr><th>Campaign</th><th>Votes</th><th>Share</th><th>Time</th><th>On record</th></tr></thead><tbody>${leaderboard(state,round).map(p=>`<tr class="${p.id===identity.id?'mine':''}"><td><b>${esc(p.name)}</b><span class="small muted"> · ${p.race}</span></td><td class="leader">${p.points}</td><td>${p.share}%</td><td>${p.time}</td><td>${p.answered}/12${p.answered>=12?' ✓':''}</td></tr>`).join('')}</tbody></table>`;}
 function receiptHTML(r,card){if(!r)return '';if(r.skipped)return '<div class="receipt problem">This stop closed before you submitted. No points or Time were used.</div>';const change=r.conflict&&!r.explained;return `<div class="receipt ${change?'problem':''}" role="status"><div class="rowspread"><h3>${change?'Pat smells a flip-flop.':'On the record.'}</h3><b class="scorebig">${r.points>=0?'+':''}${r.points}</b></div><p>${esc(card.options[r.choice].tradeoff)}</p><p><b>${r.base>=3?'Huge in your state.':r.base>=2?'That plays well here.':r.base===1?'Some votes.':r.base===0?'A wash.':r.base===-1?'That cost you.':'Ouch.'}</b> ${r.note?esc(r.note)+' ':''}${esc(r.reason)}</p>${reactHTML(card.options[r.choice],card)}${r.previous!==null&&r.previous!==undefined?`<p>${change?'This contradicts what you said earlier (−2).':r.explained?'You owned the change (+1).':'Consistent with your record (+1).'}</p>`:''}<div class="caption">${r.base>=0?'+':''}${r.base} votes in this state ${r.callback>=0?'+':''}${r.callback} record · ${r.cost} Time spent</div>${change&&me()&&state.phase==='play'?`<p class="revision"><b>Your correction:</b> “I’ve changed my mind, and here’s why: ${esc(card.options[r.choice].label)}”</p><button class="explain" data-do="explain" ${pending||tally(me(),state.round).time<1?'disabled':''}>Own the flip-flop · 1 Time</button>`:''}</div>`;}
 function play(){const p=me(),card=DATA.cards[state.step],t=p?tally(p,state.round):{points:0,time:30,answered:0},rec=p?.rounds[state.round][state.step],cb=CALLBACKS[state.step],earlier=cb&&p?.rounds[state.round][cb.from];const done=Object.values(state.players).filter(x=>x.rounds[state.round][state.step]).length,all=Object.keys(state.players).length;const mood=rec?(rec.conflict&&!rec.explained?'dispute':rec.base===2?'agree':'question'):'idle';
- return `<div class="tourbar"><div><div class="kicker">${party()} tour · Chapter ${Math.floor(state.step/5)+1} / 4</div><h2 style="margin-top:6px">${p?race(p.race).name+' · '+esc(p.name):'Instructor’s seat'}</h2></div><div class="stats"><div class="stat"><strong>${p?t.points:'—'}</strong><span>Votes</span></div><div class="stat"><strong>${p?share(t.points,p.race,state.round)+'%':'—'}</strong><span>Share</span></div><div class="stat"><strong>${p?t.time:'—'}</strong><span>Time</span></div><div class="stat"><strong>${done}/${all}</strong><span>Ready</span></div></div></div><div class="route" aria-label="Tour progress">${DATA.cards.map((c,i)=>`<button title="Stop ${i+1}: ${c.title}" aria-label="Stop ${i+1}: ${c.title}${i===state.step?', current':''}" data-history="${i}" class="${i<state.step?'passed':''} ${i===state.step?'current':''}" ${i>state.step?'disabled':''}></button>`).join('')}</div>${state.step>0&&state.step%5===0?'<div class="chapter"><b>Chapter break.</b> Compare notes: whose state rewarded what?</div>':''}<div class="playgrid"><section><div class="scenehead"><div><div class="kicker">STOP ${String(state.step+1).padStart(2,'0')} · ${esc(card.topic)}</div><h2 style="margin-top:7px">${esc(card.title)}</h2></div><span class="sourcebadge">${p?esc(race(p.race).name):'2026 battleground'}</span></div><p class="sceneprompt">${esc(card.prompt)}</p><div class="artstage ${reacting?'reacting':''}" style="margin-top:12px">${CampaignArt.scene(card.kind,card.cast,rec?card.cast.map((key,i)=>key==='pat'?mood:i%2?'question':mood):'idle')}</div><div class="goal"><span class="kicker">Your job</span><b>${esc(card.goal)}</b></div><div class="clues">${card.clues.map((c,i)=>`<div class="clue"><b>0${i+1}</b>${esc(c)}</div>`).join('')}</div>${p?`<div class="localhint"><b>${esc(race(p.race).name)}:</b> ${esc(card.local[p.race]||'Local pressures: '+race(p.race).issues+'.')}</div>`:''}<div class="groups">${card.groups.map(g=>`<span class="grp">${esc(DATA.groups[g])}</span>`).join('')}</div>${cb&&Number.isInteger(earlier?.choice)&&earlier.choice<4?`<div class="callback"><b>Pat’s notebook · stop ${cb.from+1}</b><br>${esc(cb.text)}<br><em>“${esc(DATA.cards[cb.from].options[earlier.choice].label)}”</em></div>`:''}<button data-do="cardSources" style="margin-top:12px;font-size:11px">Sources & scoring notes</button></section><section><div class="choicehead"><h3>${p?'Your response':'Class responses'}</h3><span class="small muted">${p?t.answered+'/12 on record to qualify':'Host controls below'}</span></div>${!p?'<div class="readonly">Students choose from these responses. You can watch the shared record below.</div>':''}<div class="choices">${card.options.map((o,i)=>{let conflict=false;try{conflict=p&&evaluateChoice(p,state.round,state.step,i).conflict;}catch{}const picked=rec?rec.choice===i:selected===i;return `<button class="choice ${i===4?'quiet':''} ${picked?'selected':''} ${rec?'submitted':''}" data-choice="${i}" ${!p||rec||pending||o.cost>t.time?'disabled':''} aria-pressed="${picked}"><span class="letter">${'ABCDE'[i]}</span><span class="label">${esc(o.label)}${conflict?'<span class="warning">Contradicts an earlier promise. Owning it costs 1 extra Time.</span>':''}</span><span class="cost">${o.cost?o.cost+' Time':'No Time'}</span></button>`}).join('')}</div>${p&&!rec?`<button class="primary commit" data-do="commit" ${selected===null||pending?'disabled':''}>${selected===null?'Pick a line':'Say it: '+String.fromCharCode(65+selected)+' →'}</button><div class="caption">Once you say it, it’s on the record, and the class sees it.</div>`:''}${receiptHTML(rec,card)}${!p?table():''}</section></div><div class="hostbar"><span><b>${done} of ${all} committed.</b> ${rec?'Your answer is in.':'Answer before the bus leaves.'}</span><div class="actions">${isHost()?`<button class="primary" data-do="advance" ${done!==all||pending?'disabled':''}>${state.step===19?'Finish this tour':'Next stop'} →</button>${done!==all?'<button data-do="forceAdvance">Advance anyway</button>':''}`:'<span class="small">The instructor drives the bus.</span>'}</div></div><div class="lower"><section class="panel"><div class="rowspread"><h3>The campaign map</h3><button data-do="record">My record</button></div><div style="margin-top:12px">${mapHTML()}</div><div style="margin-top:16px">${raceCard()}</div></section><section class="panel"><div class="rowspread"><h3>The classroom</h3><button data-do="allRecords">Responses</button></div>${table()}<h3 style="margin-top:24px">Just happened</h3>${eventsHTML()}</section></div>`;
+ return `<div class="tourbar"><div><div class="kicker">${party()} tour · Chapter ${Math.floor(state.step/5)+1} / 4</div><h2 style="margin-top:6px">${p?race(p.race).name+' · '+esc(p.name):'Instructor’s seat'}</h2></div><div class="stats"><div class="stat"><strong>${p?t.points:'—'}</strong><span>Votes</span></div><div class="stat"><strong>${p?share(t.points,p.race,state.round)+'%':'—'}</strong><span>Share</span></div><div class="stat"><strong>${p?t.time:'—'}</strong><span>Time</span></div><div class="stat"><strong>${done}/${all}</strong><span>Ready</span></div></div></div><div class="route" aria-label="Tour progress">${DATA.cards.map((c,i)=>`<button title="Stop ${i+1}: ${c.title}" aria-label="Stop ${i+1}: ${c.title}${i===state.step?', current':''}" data-history="${i}" class="${i<state.step?'passed':''} ${i===state.step?'current':''}" ${i>state.step?'disabled':''}></button>`).join('')}</div>${state.step>0&&state.step%5===0?'<div class="chapter"><b>Chapter break.</b> Compare notes: whose state rewarded what?</div>':''}<div class="playgrid"><section><div class="scenehead"><div><div class="kicker">STOP ${String(state.step+1).padStart(2,'0')} · ${esc(card.topic)}</div><h2 style="margin-top:7px">${esc(card.title)}</h2></div><span class="sourcebadge">${p?esc(race(p.race).name):'2026 battleground'}</span></div><p class="sceneprompt">${esc(card.prompt)}</p><div class="artstage ${reacting?'reacting':''}" style="margin-top:12px">${CampaignArt.scene(card.kind,card.cast,rec?card.cast.map((key,i)=>key==='pat'?mood:i%2?'question':mood):'idle')}</div><div class="goal"><span class="kicker">Your job</span><b>${esc(card.goal)}</b></div>${p?Crowd.panel(state.step,p.race,rec):`<div class="clues">${card.clues.map((c,i)=>`<div class="clue"><b>0${i+1}</b>${esc(c)}</div>`).join('')}</div>`}${p?`<div class="localhint"><b>${esc(race(p.race).name)}:</b> ${esc(card.local[p.race]||'Local pressures: '+race(p.race).issues+'.')}</div>`:''}${cb&&Number.isInteger(earlier?.choice)&&earlier.choice<4?`<div class="callback"><b>Pat’s notebook · stop ${cb.from+1}</b><br>${esc(cb.text)}<br><em>“${esc(DATA.cards[cb.from].options[earlier.choice].label)}”</em></div>`:''}<button data-do="cardSources" style="margin-top:12px;font-size:11px">Sources & scoring notes</button></section><section><div class="choicehead"><h3>${p?'Your response':'Class responses'}</h3><span class="small muted">${p?t.answered+'/12 on record to qualify':'Host controls below'}</span></div>${!p?'<div class="readonly">Students choose from these responses. You can watch the shared record below.</div>':''}<div class="choices">${card.options.map((o,i)=>{let conflict=false;try{conflict=p&&evaluateChoice(p,state.round,state.step,i).conflict;}catch{}const picked=rec?rec.choice===i:selected===i;return `<button class="choice ${i===4?'quiet':''} ${picked?'selected':''} ${rec?'submitted':''}" data-choice="${i}" ${!p||rec||pending||o.cost>t.time?'disabled':''} aria-pressed="${picked}"><span class="letter">${'ABCDE'[i]}</span><span class="label">${esc(o.label)}${conflict?'<span class="warning">Contradicts an earlier promise. Owning it costs 1 extra Time.</span>':''}</span><span class="cost">${o.cost?o.cost+' Time':'No Time'}</span></button>`}).join('')}</div>${p&&!rec?`<button class="primary commit" data-do="commit" ${selected===null||pending?'disabled':''}>${selected===null?'Pick a line':'Say it: '+String.fromCharCode(65+selected)+' →'}</button><div class="caption">Once you say it, it’s on the record, and the class sees it.</div>`:''}${receiptHTML(rec,card)}${!p?table():''}</section></div><div class="hostbar"><span><b>${done} of ${all} committed.</b> ${rec?'Your answer is in.':'Answer before the bus leaves.'}</span><div class="actions">${isHost()?`<button class="primary" data-do="advance" ${done!==all||pending?'disabled':''}>${state.step===19?'Finish this tour':'Next stop'} →</button>${done!==all?'<button data-do="forceAdvance">Advance anyway</button>':''}`:'<span class="small">The instructor drives the bus.</span>'}</div></div><div class="lower"><section class="panel"><div class="rowspread"><h3>The campaign map</h3><button data-do="record">My record</button></div><div style="margin-top:12px">${mapHTML()}</div><div style="margin-top:16px">${raceCard()}</div></section><section class="panel"><div class="rowspread"><h3>The classroom</h3><button data-do="allRecords">Responses</button></div>${table()}<h3 style="margin-top:24px">Just happened</h3>${eventsHTML()}</section></div>`;
 }
 function eventsHTML(){return state.events.slice(-7).reverse().map(e=>`<div class="event">${esc(e.message)}</div>`).join('');}
 function results(){const ws=winners(state),p=me();return `<section class="resultshero"><div class="kicker">${party()} tour · 20 stops complete</div><div class="castrow">${CampaignArt.character('pat','agree')}${CampaignArt.character('jo','agree')}${CampaignArt.character('frankie','agree')}</div><h1>${ws.length?ws.length>1?'A shared win.':esc(ws[0].name)+' wins.':'The tour is complete.'}</h1><p>${ws.length?ws.map(w=>esc(w.name)+' · '+w.race).join(' / ')+' · '+ws[0].share+'% of the available vote.':'Nobody went on record 12 times.'}</p><span class="tag">PLAYBOOK MATH · NOT AN ELECTION FORECAST</span>${isHost()&&state.phase!=='finished'?`<div class="actions" style="justify-content:center">${state.round===0?'<button class="primary" data-do="second">Play the Republican tour →</button>':''}<button data-do="finish">Finish & debrief</button></div>`:''}</section><div class="resultpair"><section class="panel"><h3>${party()} tour</h3>${table()}<div class="actions"><button data-do="record">My full record</button><button data-do="allRecords">All responses</button>${isHost()?'<button data-do="export">Download class record</button>':''}</div></section><section class="panel"><h3>${state.round===1?'First tour comparison':'Discuss one promise'}</h3>${state.round===1?table(0):'<p style="margin-top:14px">Which line traveled across very different states? Where did purity cost you votes, and where did keeping quiet pay?</p>'}<p class="small muted" style="margin-top:15px">Same state, same stops, different party. Compare which lines flipped from winners to losers, and why donors and voters wanted different things.</p></section></div><section class="panel exitcard"><h3>Follow the promise into government.</h3><p style="margin-top:10px">Who needs to act, who pays, and where could delivery change the policy?</p>${p?`<form id="exitForm"><label class="field">The handoff most likely to change substantive policy is… because…<textarea id="handoff" maxlength="600" required>${esc(form.handoff||p.exit?.handoff||'')}</textarea></label><label class="field">A monitoring indicator that could reveal this change early is…<textarea id="indicator" maxlength="600" required>${esc(form.indicator||p.exit?.indicator||'')}</textarea></label><button class="primary" ${pending?'disabled':''}>Share my exit ticket</button><span class="caption"> Visible to this classroom.</span></form>`:'<p class="caption">Students can submit their two sentences here.</p>'}${Object.values(state.players).filter(p=>p.exit).map(p=>`<div class="saved-exit"><b>${esc(p.name)}</b><p>${esc(p.exit.handoff)}</p><p>${esc(p.exit.indicator)}</p></div>`).join('')}</section>`;}
@@ -352,7 +543,7 @@ function render(){
  $('app').innerHTML=renderHeader()+`<main class="wrap">${!state?room?'<div class="empty">Connecting to your classroom…</div>':welcome():state.phase==='lobby'?lobby():!me()&&!isHost()?`<div class="panel"><h2>Join the tour</h2><p style="margin:12px 0">The class is at stop ${state.step+1}. Claim an available race to join.</p>${claimForm()}</div>`:state.phase==='play'?play():results()}<footer class="footer"><span>PLCY 8118 · Policy, promises, implementation · November 3, 2026</span><span>Real races. Vote math from the course playbook. <button data-do="sources">Sources</button></span></footer></main>`;
  if(focusID&&$(focusID)){const f=$(focusID);f.focus({preventScroll:true});if(position!==null&&f.setSelectionRange)try{f.setSelectionRange(position,position);}catch{}}
 }
-function reactHTML(o,card){const keys=card.groups.filter(g=>g in o.react);if(!keys.length)return '';return `<div class="reacts">${keys.map(g=>{const v=o.react[g];return `<span class="react ${v>0?'up':v<0?'down':'meh'}">${v>0?'▲':v<0?'▼':'●'} ${esc(DATA.groups[g])}</span>`;}).join('')}</div>`;}
+function reactHTML(o,card){const step=DATA.cards.indexOf(card),race=me()?.race,choice=card.options.indexOf(o);const keys=race&&step>=0?Crowd.groups(step,race):card.groups.filter(g=>g in o.react);if(!keys.length)return '';return `<div class="reacts">${keys.map(g=>{const v=race&&step>=0?Crowd.reaction(step,choice,g):o.react[g];return `<span class="react ${v>0?'up':v<0?'down':'meh'}">${v>0?'▲':v<0?'▼':'●'} ${esc(Crowd.NAMES[g]||DATA.groups[g])}</span>`;}).join('')}</div>`;}
 function showRules(){modal('How to play',`<p><b>Win the biggest share of your state’s available votes.</b> Go on record (A–D) at least 12 times out of 20 to qualify. Ties are shared wins.</p><ol><li>Claim a state. Each one has real 2026 nominees and its own local pressures.</li><li>At each stop, read the clues and your state’s local angle, then pick A–D or “Keep very quiet / pivot hard.”</li><li>Each answer moves votes in your state, from −3 to +3. The same line can win in Iowa and flop in Maine.</li><li>You have 30 Time. Answers cost 0–3, shown on the button. Keeping quiet is free.</li><li>Five stops bring back an earlier promise. Stay consistent for +1. Contradict yourself and lose 2, or spend 1 Time to own the flip-flop and get +1 instead.</li></ol><p><b>Share</b> is your votes divided by the best score anyone could get in your state as your party. That keeps tiny Alaska and giant Texas on the same scoreboard.</p><p>Keeping quiet is sometimes the smartest move, especially on polarizing culture-war fights in middle-tier states. On pocketbook issues, silence usually costs you.</p><p>First you run as the Democrat. Then you run the same state as the Republican, with fresh Time and a fresh count.</p><p class="small muted">Only nicknames, choices, scores, and exit tickets are saved. Rooms last 48 hours. Keep your instructor link private; share only the student room link.</p>`);}
 function sourceHTML(keys){const list=keys?DATA.sources.filter(s=>keys.includes(s.key)):DATA.sources;return `<p><b>Where the vote math comes from.</b> Every vote value comes from the course’s <i>Senate Battlegrounds 2026</i> playbook: its state-by-state messaging advice and its cross-cutting rules (cost of living is the master frame; the Iran war punishes candidates who skip the pocketbook; most swing voters care more about gas prices than about AIPAC; quiet on culture-war fights often pays in middle-tier states). Those are design judgments, not poll results. SCORING.txt lists every value for every state and party.</p><p>Candidates and races were checked November 3, 2026. Populations are July 2025 Census estimates (Kansas: approximate). The lesson does not pull live returns.</p><p>The AIPAC panel stands for an advocacy organization and its PACs, not for any religious community. Members of every group on screen disagree with each other.</p><div class="source-list">${list.map(s=>s.url?`<p><a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.title)}</a></p>`:`<p>${esc(s.title)}</p>`).join('')}</div><p class="small muted">Map geometry: Census boundaries via us-atlas (ISC). Original SVG character artwork. No external fonts or art.</p>`;}
 function showRecord(id=identity.id,round=state.round){const p=state.players[id];if(!p){modal('Campaign record','<p>Claim a race to start a personal record.</p>');return;}modal(p.name+' · '+(round?'Republican':'Democratic'),`<table class="history"><thead><tr><th>Stop</th><th>Response</th><th>Points</th><th>Time</th></tr></thead><tbody>${p.rounds[round].map((r,i)=>r?`<tr><td><button data-detail="${i}" data-player="${p.id}" data-round="${round}">${i+1}. ${esc(DATA.cards[i].title)}</button></td><td>${r.skipped?'Skipped':'ABCDE'[r.choice]+(r.explained?' · explained':'')}</td><td>${r.points}</td><td>${r.cost}</td></tr>`:'').join('')}</tbody></table>${round===1?`<button data-viewrecord="${p.id}" data-round="0" style="margin-top:15px">View Democratic record</button>`:''}`);}
